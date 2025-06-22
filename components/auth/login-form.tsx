@@ -11,8 +11,11 @@ import { Button } from '@/components/ui/button';
 import FormErrors from '../general/form-error';
 import FormSuccess from '../general/form-success';
 import { login } from "@/actions/auth.actions"
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginForm() {
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email Already In Use With Different Provider" : ""
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition()
@@ -27,7 +30,7 @@ export default function LoginForm() {
         setError("");
         setSuccess("");
         startTransition(() => {
-            login(values).then((data) => {setError(data.error); setSuccess(data.success)})
+            login(values).then((data) => { setError(data.error); setSuccess(data.success) })
         })
     }
     return (
@@ -38,21 +41,23 @@ export default function LoginForm() {
                         <FormField control={form.control} name='email' render={({ field }) => <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input {...field} placeholder='your.name@youremail.com' type='email' disabled={isPending}/>
+                                <Input {...field} placeholder='your.name@youremail.com' type='email' disabled={isPending} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>} />
                         <FormField control={form.control} name='password' render={({ field }) => <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input {...field} placeholder='*********' type='password' disabled={isPending}/>
+                                <Input {...field} placeholder='*********' type='password' disabled={isPending} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>} />
                     </div>
-                    <FormErrors message={error} />
+                    <FormErrors message={error || urlError} />
                     <FormSuccess message={success} />
-                    <Button type='submit' className='w-full '>Sign In</Button>
+                    <Button type='submit' className='w-full cursor-pointer' disabled={isPending}>
+                        {isPending ? "Signing In..." : "Sign In"}
+                    </Button>
                 </form>
             </Form>
         </CardWrapper>
