@@ -1,7 +1,6 @@
-import LoginButton from '@/components/auth/sign-in';
 import { Button } from '@/components/ui/button';
 import React from 'react';
-
+import Link from 'next/link';
 const DraBlissLanding = () => {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -17,11 +16,12 @@ const DraBlissLanding = () => {
             <li><a href="#" className="text-gray-700 hover:text-red-500 font-medium">Discounts</a></li>
             <li><a href="#" className="text-gray-700 hover:text-red-500 font-medium">Store</a></li>
             <li>
-              <LoginButton>
-                <Button className="bg-red-500 text-white px-4 py-2 rounded-md font-bold hover:bg-red-600 transition">
+              <Button className="bg-red-500 text-white px-4 py-2 rounded-md font-bold hover:bg-red-600 transition">
+                <Link href="/sign-in">
                   Login
-                </Button>
-              </LoginButton>
+                </Link>
+
+              </Button>
             </li>
           </ul>
         </nav>

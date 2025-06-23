@@ -12,6 +12,7 @@ import FormErrors from '../general/form-error';
 import FormSuccess from '../general/form-success';
 import { login } from "@/actions/auth.actions"
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function LoginForm() {
     const searchParams = useSearchParams();
@@ -30,11 +31,18 @@ export default function LoginForm() {
         setError("");
         setSuccess("");
         startTransition(() => {
-            login(values).then((data) => { setError(data.error); setSuccess(data.success) })
+            login(values).then((data) => {
+                if (!data) {
+                    setError("Unexpected error occurred");
+                    return;
+                }
+                setError(data.error);
+                setSuccess(data.success);
+            });
         })
     }
     return (
-        <CardWrapper showSocial headerLabel={'Welcome Back'} backButtonLabel={"Don't Have An Account?"} backButtonHref={'/sign-up'}>
+        <CardWrapper showSocial headerLabel={'Welcome Back'} backButtonLabel={"Don't Have An Account?"} backButtonHref={'/auth/sign-up'}>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
                     <div className="space-y-4">
@@ -50,6 +58,11 @@ export default function LoginForm() {
                             <FormControl>
                                 <Input {...field} placeholder='*********' type='password' disabled={isPending} />
                             </FormControl>
+                            <div>
+                                <Link href="/auth/password-reset-request">
+                                    <p className='text-sm py-2'>Forgot Password? Reset Here</p>
+                                </Link>
+                            </div>
                             <FormMessage />
                         </FormItem>} />
                     </div>

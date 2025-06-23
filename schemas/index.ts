@@ -14,3 +14,11 @@ export const SignUpSchema = z.object({
     password: z.string({message: "Password Is Required"}),
     role: z.string()
 })
+
+export const PasswordResetSchema = z.object({
+    email: z.string().email({message: "Email Is Required"}),
+})
+
+export const NewPasswordSchema = z.object({
+    password: z.string().min(6, {message: "Email Is Required"}),
+})
